@@ -1,0 +1,33 @@
+@property --scatter-power{
+  syntax:'<number>';
+  inherits:true;
+  initial-value:0;
+}
+.kinetic-text[data-motion="continuous"]{
+  --scatter-power:var(--scatter-target,0);
+  transition:--scatter-power .42s linear;
+}
+.kinetic-text[data-motion="continuous"] .kinetic-glyph{
+  --loosen:max(0,calc((var(--scatter-power,0) - .12)/.88));
+  --detached:max(0,calc((var(--scatter-power,0) - var(--break-at))/.4));
+  transform:translate3d(calc(var(--drift-x)*var(--loosen) + var(--fall-x)*var(--detached)),calc(var(--drift-y)*var(--loosen) + var(--fall-y)*var(--detached)),0) rotate(calc(var(--turn)*var(--loosen) + var(--fall-turn)*var(--detached)));
+  opacity:max(.48,calc(1 - var(--detached)*.23));
+  transition:none;
+  will-change:auto;
+}
+.kinetic-text[data-motion="continuous"] .kinetic-ink{animation:none;transform:none}
+.kinetic-text[data-motion="continuous"] .kinetic-word{animation:none}
+.kinetic-text.kinetic-active[data-motion="continuous"] .kinetic-word{
+  animation:kinetic-drift 1.8s ease-in-out var(--float-delay,0s) infinite alternate;
+}
+@keyframes kinetic-drift{
+  from{transform:translate3d(0,calc(var(--scatter-power,0)*-.55px),0)}
+  to{transform:translate3d(0,calc(var(--scatter-power,0)*.55px),0)}
+}
+.god-control-actions{display:flex;align-items:center;gap:16px;min-width:0}
+.god-preview-pedal{display:grid;grid-template-columns:1fr auto;gap:6px 12px;min-width:180px;font-size:9px;color:var(--muted)}
+.god-preview-pedal strong{font-size:10px;letter-spacing:0;color:var(--accent);font-weight:500}
+.god-preview-pedal input{grid-column:1/-1;margin:0;width:100%;height:12px;accent-color:var(--accent)}
+.god-control:has(.god-preview-pedal)>div:first-child{min-width:0}
+@media(max-width:760px){.god-control:has(.god-preview-pedal){flex-wrap:wrap}.god-control-actions{width:100%;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px}.god-preview-pedal{min-width:0;flex:1;max-width:250px}}
+@media(prefers-reduced-motion:reduce){.app{transition:none!important}.kinetic-text[data-motion="continuous"] .kinetic-glyph{transform:none!important;opacity:1!important}.kinetic-text.kinetic-active[data-motion="continuous"] .kinetic-word{animation:none!important}}

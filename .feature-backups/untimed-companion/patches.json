@@ -1,0 +1,158 @@
+[
+  {
+    "before": "useLayoutEffect, useRef",
+    "after": "useLayoutEffect, useRef, useMemo"
+  },
+  {
+    "before": "useSessionClock,timeExpired,buildTimeline",
+    "after": "useSessionClock,timeExpired,buildTimeline,idleRemaining"
+  },
+  {
+    "before": "GodModeEffects,DivineCostume,playGodKey",
+    "after": "GodModeEffects,playGodKey"
+  },
+  {
+    "before": "import {MatchAnalytics} from './MatchAnalytics';",
+    "after": "import {MatchAnalytics} from './MatchAnalytics';\nimport {COMPANION_DEFAULTS,companionName,companionStyle,getCompanionReaction} from './companion';\nimport {CompanionStudio,CompanionDetails,CompanionFace} from './Companion';\nimport {DivineCostume} from './CompanionDivine';\nimport {KineticText} from './features/god-mode/KineticText';"
+  },
+  {
+    "before": "const initialSettings={theme:",
+    "after": "const initialSettings={...COMPANION_DEFAULTS,theme:"
+  },
+  {
+    "before": "godMode=false}){return <svg",
+    "after": "godMode=false,preferences={}}){if(preferences.buddyMotion===false){typing=false;mousing=false;mouse={x:0,y:0};}return <svg"
+  },
+  {
+    "before": "${godMode?'divine':''}`} viewBox",
+    "after": "${godMode?'divine':''} ${preferences.buddyMotion===false?'motion-off':''} accessory-${preferences.buddyAccessory||'clips'}`} style={companionStyle(preferences)} viewBox"
+  },
+  {
+    "before": "<g transform={`translate(${mouse.x*10},${mouse.y*7})`}>",
+    "after": "<g className={`mascot-face ${['charged','overdrive','determined','proud','tired'].includes(mood)?'enhanced-face':''}`} transform={`translate(${mouse.x*10},${mouse.y*7})`}>"
+  },
+  {
+    "before": "</g><ellipse cx=\"87\"",
+    "after": "<CompanionFace mood={mood}/></g><ellipse cx=\"87\""
+  },
+  {
+    "before": "<rect x=\"67\" y=\"165\"",
+    "after": "<CompanionDetails settings={preferences} divine={godMode}/><rect x=\"67\" y=\"165\""
+  },
+  {
+    "before": "const events=useRef([]);",
+    "after": "const lastActivity=useRef(null);\n const events=useRef([]);"
+  },
+  {
+    "before": "start.current=null;typedRef.current='';",
+    "after": "start.current=null;lastActivity.current=null;typedRef.current='';"
+  },
+  {
+    "before": "const correct=[...typed].filter((c,i)=>c===passage[i]).length;",
+    "after": "const correct=useMemo(()=>[...typed].filter((c,i)=>c===passage[i]).length,[typed,passage]);"
+  },
+  {
+    "before": "const finish=(value=typed)=>",
+    "after": "const finish=(value=typed,reason='completed')=>"
+  },
+  {
+    "before": "const seconds=mode==='time'?Math.min(limit,elapsed()):elapsed();",
+    "after": "const seconds=mode==='time'?Math.min(limit,elapsed()):mode==='free'&&reason==='idle'?Math.max(1,(lastActivity.current-start.current)/1000+.001):elapsed();"
+  },
+  {
+    "before": "duration:seconds,mode,characters:count",
+    "after": "duration:seconds,mode,endReason:reason,characters:count"
+  },
+  {
+    "before": "onExpire:()=>finish(typedRef.current)",
+    "after": "lastActivity:lastActivity.current,idleSeconds:5,onExpire:reason=>finish(typedRef.current,reason)"
+  },
+  {
+    "before": "if(e.key==='Escape')setModal(null)",
+    "after": "if(e.key==='Escape'){if(modal){setModal(null);}else if(mode==='free'&&running&&!finished.current){e.preventDefault();finish(typedRef.current,'escape');}} "
+  },
+  {
+    "before": "[mode,limit,wordLimit,custom,modal]);",
+    "after": "[mode,limit,wordLimit,custom,modal,running]);"
+  },
+  {
+    "before": "if(mode==='time'&&timeExpired(start.current,now,limit)){finish(typedRef.current);return;}",
+    "after": "if(mode==='time'&&timeExpired(start.current,now,limit)){finish(typedRef.current,'timer');return;}\n   if(mode==='free'&&start.current!==null&&idleRemaining(lastActivity.current,now)===0){finish(typedRef.current,'idle');return;}"
+  },
+  {
+    "before": "typedRef.current=value;setTyped(value);",
+    "after": "lastActivity.current=now;typedRef.current=value;setTyped(value);"
+  },
+  {
+    "before": "if(value.length>=passage.length)finish(value);",
+    "after": "if(mode==='free'){if(passage.length-value.length<160)setPassage(p=>p+' '+generate());}else if(value.length>=passage.length)finish(value);"
+  },
+  {
+    "before": "style={godMode.active?{...css,...GOD_MODE_PALETTE}:css}",
+    "after": "style={godMode.active?{...css,...GOD_MODE_PALETTE,'--god-power':godMode.power}:css}"
+  },
+  {
+    "before": "</span>keiko<span className=\"brand-dot\">",
+    "after": "</span><KineticText text=\"keiko\" active={godMode.active} power={godMode.power}/><span className=\"brand-dot\">"
+  },
+  {
+    "before": ">YOUR LITTLE FOCUS SPACE</div>",
+    "after": "><KineticText text=\"YOUR LITTLE FOCUS SPACE\" active={godMode.active} power={godMode.power}/></div>"
+  },
+  {
+    "before": "<Icon size={19}/>{label}{id===",
+    "after": "<Icon size={19}/><KineticText text={label} active={godMode.active} power={godMode.power}/>{id==="
+  },
+  {
+    "before": "</nav><div className=\"sidebar-note\">",
+    "after": "<button className=\"nav-item\" onClick={()=>setModal('buddy')}><Sparkles size={19}/> Companion studio</button></nav><div className=\"sidebar-note\">"
+  },
+  {
+    "before": "<p>A little practice.<br/>A little progress.<br/><strong>A better you.</strong></p>",
+    "after": "<p><KineticText text=\"A little practice.\" active={godMode.active} power={godMode.power}/><br/><KineticText text=\"A little progress.\" active={godMode.active} power={godMode.power}/><br/><strong><KineticText text=\"A better you.\" active={godMode.active} power={godMode.power}/></strong></p>"
+  },
+  {
+    "before": "<h1>Find your flow<span>.</span></h1><p>Clear your mind. Feel the keys. Let the words follow.</p>",
+    "after": "<h1><KineticText text=\"Find your flow\" active={godMode.active} power={godMode.power}/><span>.</span></h1><p><KineticText text=\"Clear your mind. Feel the keys. Let the words follow.\" active={godMode.active} power={godMode.power}/></p>"
+  },
+  {
+    "before": "['custom',Settings,'custom']",
+    "after": "['custom',Settings,'custom'],['free',Sparkles,'untimed']"
+  },
+  {
+    "before": ":<span>{mode==='quote'?'A little food for thought':'Your words, your practice'}</span>",
+    "after": ":mode==='free'?<div className=\"free-session-info\"><strong>No time limit</strong><span><kbd>esc</kbd> finish</span><span>5s idle ends session</span></div>:<span>{mode==='quote'?'A little food for thought':'Your words, your practice'}</span>"
+  },
+  {
+    "before": "{mode==='time'?remaining:Math.max(0,passage.split(' ').length-typed.split(' ').length+1)}",
+    "after": "{mode==='time'?remaining:mode==='free'?sessionClock:Math.max(0,passage.split(' ').length-typed.split(' ').length+1)}"
+  },
+  {
+    "before": "{mode==='time'?'seconds left':'words left'}",
+    "after": "{mode==='time'?'seconds left':mode==='free'?'time in the flow':'words left'}"
+  },
+  {
+    "before": "</div><div className=\"typing-hint\">",
+    "after": "</div>{mode==='free'&&<div className={`free-idle-hint ${running&&idleLeft<4?'is-counting':''}`}>{running&&idleLeft<4?<><span>Session ends in {Math.ceil(idleLeft)}s · keep typing to continue</span><span className=\"free-idle-track\"><i style={{width:`${idleLeft/5*100}%`}}/></span></>:<span>No rush. Press Escape when you’re done.</span>}</div>}<div className=\"typing-hint\">"
+  },
+  {
+    "before": "godMode={godMode.active}/>",
+    "after": "godMode={godMode.active} preferences={settings}/>"
+  },
+  {
+    "before": "{godMode.active?'Keiko, ascended':'Hey, I’m Keiko'}",
+    "after": "{godMode.active?`${name}, ascended`:`Hey, I’m ${name}`}"
+  },
+  {
+    "before": "<p>Your tiny cheerleader.<br/>Your biggest fan.</p><div className=\"speech-bubble\">",
+    "after": "<p>Your tiny cheerleader.<br/>Your biggest fan.</p><span className=\"reaction-badge\">{reaction.label}</span><div className=\"speech-bubble\">"
+  },
+  {
+    "before": "{modal==='results'&&report&&",
+    "after": "{modal==='buddy'&&<CompanionStudio settings={settings} update={update} onClose={()=>setModal(null)} renderCompanion={props=><Mascot {...props}/>}/>}\n {modal==='results'&&report&&"
+  },
+  {
+    "before": "{modal&&modal!=='results'&&",
+    "after": "{modal&&modal!=='results'&&modal!=='buddy'&&"
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "target": "src/main.jsx",
+  "patches": [
+    {
+      "after": "import {useGodMode} from './features/god-mode/logic';",
+      "before": "const useGodMode=()=>({active:false,previewing:false,power:0,baseline:40,threshold:52});"
+    },
+    {
+      "after": "import {GOD_MODE_PALETTE,GodModeControl,GodModeEffects,playGodKey} from './features/god-mode/GodMode';",
+      "before": "const GOD_MODE_PALETTE={};const GodModeControl=()=>null;const GodModeEffects=()=>null;const playGodKey=()=>{};"
+    },
+    {
+      "after": "import {KineticText} from './features/god-mode/KineticText';",
+      "before": "const KineticText=({text})=>text;"
+    }
+  ],
+  "featureFiles": [
+    "src/features/god-mode/logic.js",
+    "src/features/god-mode/GodMode.jsx",
+    "src/features/god-mode/god-mode.css",
+    "src/features/god-mode/README.md",
+    "tests/god-mode.test.js",
+    "src/features/god-mode/KineticText.jsx",
+    "src/features/god-mode/motion.js",
+    "src/features/god-mode/kinetic.css"
+  ]
+}
